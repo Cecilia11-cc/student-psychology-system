@@ -1,0 +1,106 @@
+[
+  {
+    "title": "情绪调节小组训练",
+    "description": "通过每周1-2次的小组活动，教导学生识别和命名情绪，学习深呼吸、数数等基本情绪调节策略。使用情绪卡片、角色扮演和绘本故事作为教学工具。",
+    "target_dimension_codes": ["EMO_REG", "EMO_EXP"],
+    "age_group": "both",
+    "suggestion_type": "emotional",
+    "priority": "high",
+    "strategies": [
+      {"type": "group_activity", "description": "情绪识别游戏：使用情绪卡片和镜子练习", "frequency": "每周2次，每次30分钟"},
+      {"type": "individual_practice", "description": "冷静角策略：感到生气时使用'冷静五步骤'", "frequency": "按需使用"},
+      {"type": "parent_involvement", "description": "家庭情绪日记：家长与孩子每天记录一种情绪", "frequency": "每日"}
+    ]
+  },
+  {
+    "title": "社交技能训练",
+    "description": "针对社交困难学生的结构化社交技能训练，包括轮流、分享、发起对话、理解社交线索等内容。",
+    "target_dimension_codes": ["SOC_PEER", "SOC_COOP", "SOC_COMM"],
+    "age_group": "both",
+    "suggestion_type": "social",
+    "priority": "high",
+    "strategies": [
+      {"type": "group_activity", "description": "社交故事阅读与讨论", "frequency": "每周2次"},
+      {"type": "peer_buddy", "description": "安排社交能力强的同伴作为'小搭档'", "frequency": "每日课间"},
+      {"type": "role_play", "description": "模拟常见社交情境并练习回应", "frequency": "每周1次"}
+    ]
+  },
+  {
+    "title": "正向行为支持计划",
+    "description": "建立明确的行为期望和一致的奖惩系统。使用代币经济、行为契约和正向强化来减少问题行为。",
+    "target_dimension_codes": ["BEH_AGG", "BEH_DISR"],
+    "age_group": "both",
+    "suggestion_type": "behavioral",
+    "priority": "urgent",
+    "strategies": [
+      {"type": "classroom_management", "description": "建立清晰的行为规则和可视化提醒", "frequency": "持续"},
+      {"type": "token_economy", "description": "代币奖励系统：好行为赚取代币，兑换特权", "frequency": "每日"},
+      {"type": "functional_assessment", "description": "进行功能性行为评估，确定问题行为的功能", "frequency": "一次"}
+    ]
+  },
+  {
+    "title": "注意力提升干预",
+    "description": "通过环境调整、任务分解和自我监控策略，帮助学生提高课堂注意力。",
+    "target_dimension_codes": ["BEH_ATTN", "BEH_HYPR"],
+    "age_group": "elementary",
+    "suggestion_type": "behavioral",
+    "priority": "medium",
+    "strategies": [
+      {"type": "environmental", "description": "调整座位至教师附近，减少视觉干扰", "frequency": "持续"},
+      {"type": "task_modification", "description": "将大任务分解为可管理的小步骤", "frequency": "每节课"},
+      {"type": "self_monitoring", "description": "使用'注意力检查表'进行自我监控", "frequency": "每天2-3次"}
+    ]
+  },
+  {
+    "title": "焦虑干预方案",
+    "description": "针对表现出焦虑症状的学生，教授认知行为策略和放松技巧。与家长合作建立安全的过渡流程。",
+    "target_dimension_codes": ["EMO_ANX"],
+    "age_group": "both",
+    "suggestion_type": "emotional",
+    "priority": "high",
+    "strategies": [
+      {"type": "counseling", "description": "个别心理咨询：认知行为疗法技术", "frequency": "每周1次，每次40分钟"},
+      {"type": "relaxation", "description": "渐进式肌肉放松和可视化练习", "frequency": "每日5-10分钟"},
+      {"type": "parent_involvement", "description": "建立稳定的到校和离校告别流程", "frequency": "每日"}
+    ]
+  },
+  {
+    "title": "家校沟通强化计划",
+    "description": "建立更紧密的家校联系，提高家长对学生学校生活的参与度和了解。",
+    "target_dimension_codes": ["FAM_INV", "FAM_CONS"],
+    "age_group": "both",
+    "suggestion_type": "social",
+    "priority": "medium",
+    "strategies": [
+      {"type": "communication", "description": "建立每日/每周家校联系本或微信群沟通", "frequency": "每日"},
+      {"type": "meeting", "description": "定期家长会谈，分享进步和挑战", "frequency": "每月1次"},
+      {"type": "parent_education", "description": "提供家长教育工作坊：行为管理、情绪辅导", "frequency": "每学期2次"}
+    ]
+  },
+  {
+    "title": "学业支持计划",
+    "description": "为学习困难学生提供针对性的学业辅导，包括一对一辅导、小班补课和个性化作业调整。",
+    "target_dimension_codes": ["COG_READ", "COG_MATH", "COG_LANG", "BEH_TASK"],
+    "age_group": "elementary",
+    "suggestion_type": "academic",
+    "priority": "medium",
+    "strategies": [
+      {"type": "tutoring", "description": "一对一或小组课后辅导", "frequency": "每周2-3次，每次45分钟"},
+      {"type": "homework_adjustment", "description": "根据学生水平调整作业量和难度", "frequency": "持续"},
+      {"type": "progress_monitoring", "description": "每两周进行学业进步评估", "frequency": "每两周1次"}
+    ]
+  },
+  {
+    "title": "感觉统合训练",
+    "description": "为有感觉处理困难的学生提供感统活动，包括前庭、触觉和本体感觉刺激。",
+    "target_dimension_codes": ["DEV_SENS", "BEH_STIM"],
+    "age_group": "kindergarten",
+    "suggestion_type": "developmental",
+    "priority": "medium",
+    "strategies": [
+      {"type": "sensory_diet", "description": "设计个性化'感觉餐单'：每日感统活动安排", "frequency": "每日15-20分钟"},
+      {"type": "environmental", "description": "调整教室环境：减少过度刺激，提供安静区域", "frequency": "持续"},
+      {"type": "professional_referral", "description": "转介至职业治疗师进行专门评估和训练", "frequency": "按需"}
+    ]
+  }
+]

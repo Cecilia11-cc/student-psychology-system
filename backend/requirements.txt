@@ -1,0 +1,55 @@
+# Web Framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.18
+
+# Database
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+alembic==1.14.0
+psycopg2-binary==2.9.10
+
+# Auth
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.18
+
+# Validation
+pydantic==2.10.3
+pydantic-settings==2.7.0
+email-validator==2.2.0
+
+# Task Queue
+celery[redis]==5.4.0
+redis==5.2.1
+
+# Storage
+minio==7.2.10
+
+# ML & Data Science
+scikit-learn==1.5.2
+numpy==2.2.0
+scipy==1.14.1
+pandas==2.2.3
+statsmodels==0.14.4
+dtaidistance==2.3.13
+prefixspan==0.6.1
+
+# Report Generation
+jinja2==3.1.4
+weasyprint==62.3
+pyecharts==2.0.7
+
+# CORS
+# (handled by FastAPI built-in)
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+httpx==0.28.1
+factory-boy==3.3.1
+
+# Utils
+python-dotenv==1.0.1
+httptools==0.6.4

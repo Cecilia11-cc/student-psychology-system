@@ -1,0 +1,28 @@
+[
+  {"name_zh": "高风险预警", "name_en": "High Risk Alert", "category": "risk_level", "color_hex": "#ff4d4f", "icon": "AlertOutlined", "description": "综合风险评分处于高风险或严重风险水平", "is_system": true},
+  {"name_zh": "中等风险关注", "name_en": "Moderate Risk", "category": "risk_level", "color_hex": "#faad14", "icon": "WarningOutlined", "description": "综合风险评分处于中等风险水平", "is_system": true},
+  {"name_zh": "低风险正常", "name_en": "Low Risk", "category": "risk_level", "color_hex": "#52c41a", "icon": "CheckCircleOutlined", "description": "综合风险评分处于低风险水平", "is_system": true},
+
+  {"name_zh": "情绪调节困难", "name_en": "Emotion Dysregulation", "category": "emotional_state", "color_hex": "#ff7a45", "icon": "FrownOutlined", "is_system": true},
+  {"name_zh": "焦虑倾向", "name_en": "Anxiety Tendency", "category": "emotional_state", "color_hex": "#ffa940", "icon": "ThunderboltOutlined", "is_system": true},
+  {"name_zh": "情绪稳定良好", "name_en": "Emotionally Stable", "category": "emotional_state", "color_hex": "#73d13d", "icon": "SmileOutlined", "is_system": true},
+
+  {"name_zh": "社交困难", "name_en": "Social Difficulty", "category": "social_pattern", "color_hex": "#f759ab", "icon": "TeamOutlined", "is_system": true},
+  {"name_zh": "同伴关系良好", "name_en": "Good Peer Relations", "category": "social_pattern", "color_hex": "#36cfc9", "icon": "HeartOutlined", "is_system": true},
+  {"name_zh": "社交退缩", "name_en": "Socially Withdrawn", "category": "social_pattern", "color_hex": "#b37feb", "icon": "EyeInvisibleOutlined", "is_system": true},
+
+  {"name_zh": "攻击行为倾向", "name_en": "Aggression Tendency", "category": "behavior_type", "color_hex": "#ff4d4f", "icon": "FireOutlined", "is_system": true},
+  {"name_zh": "注意力缺陷倾向", "name_en": "Attention Deficit Tendency", "category": "behavior_type", "color_hex": "#ff85c0", "icon": "AimOutlined", "is_system": true},
+  {"name_zh": "行为良好", "name_en": "Well-Behaved", "category": "behavior_type", "color_hex": "#95de64", "icon": "LikeOutlined", "is_system": true},
+
+  {"name_zh": "学习困难", "name_en": "Learning Difficulty", "category": "learning_style", "color_hex": "#ffc53d", "icon": "BookOutlined", "is_system": true},
+  {"name_zh": "学习优秀", "name_en": "High Achiever", "category": "learning_style", "color_hex": "#597ef7", "icon": "TrophyOutlined", "is_system": true},
+  {"name_zh": "学习动力不足", "name_en": "Low Motivation", "category": "learning_style", "color_hex": "#d3adf7", "icon": "CoffeeOutlined", "is_system": true},
+
+  {"name_zh": "发育迟缓关注", "name_en": "Developmental Delay Concern", "category": "developmental_flag", "color_hex": "#ff7a45", "icon": "ClockCircleOutlined", "is_system": true},
+  {"name_zh": "言语发展迟缓", "name_en": "Speech Delay", "category": "developmental_flag", "color_hex": "#ff9c6e", "icon": "MessageOutlined", "is_system": true},
+
+  {"name_zh": "家庭支持不足", "name_en": "Insufficient Family Support", "category": "risk_level", "color_hex": "#ff7875", "icon": "HomeOutlined", "is_system": true},
+  {"name_zh": "创造力突出", "name_en": "Creative", "category": "strength", "color_hex": "#9254de", "icon": "BulbOutlined", "is_system": true},
+  {"name_zh": "领导力突出", "name_en": "Leadership", "category": "strength", "color_hex": "#1677ff", "icon": "CrownOutlined", "is_system": true}
+]
