@@ -1,111 +1,77 @@
 import axios from 'axios';
-import { useAuthStore } from '../store/authStore';
 import { handleMockRequest } from './mockApi';
 
-// ============================================================
-// Detect static deployment → use mock data instead of real API
-// ============================================================
-function isStaticDeploy(): boolean {
-  const host = window.location.hostname;
-  if (host.includes('github.io')) return true;
-  if (host.includes('pages.dev')) return true;
+const IS_DEMO = (() => {
+  const h = window.location.hostname;
+  if (h.includes('github.io')) return true;
   if (localStorage.getItem('demo_mode') === 'true') return true;
-  if (window.location.search.includes('demo=true')) return true;
   return false;
-}
+})();
 
-const USE_MOCK = isStaticDeploy();
-
+// Show a visible indicator on the page during development
 console.log(
-  `%c[SPS] %c${USE_MOCK ? '🎭 DEMO MODE (no backend)' : '🔌 LIVE API'}`,
-  'font-weight:bold;', 'color:' + (USE_MOCK ? '#faad14' : '#52c41a')
+  `%c🧠 SPS %c${IS_DEMO ? 'DEMO' : 'LIVE'} %c| ${window.location.hostname}`,
+  'font-weight:bold;font-size:14px;',
+  `color:${IS_DEMO ? '#faad14' : '#52c41a'};font-weight:bold;`,
+  'color:#999;'
 );
 
 const api = axios.create({
   baseURL: '/api/v1',
-  timeout: 30000,
+  timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });
 
-// ---- AUTH TOKEN ----
-api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().accessToken;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+if (IS_DEMO) {
+  // ===== DEMO MODE: intercept ALL requests, return mock data =====
+  api.interceptors.request.use(
+    async (config) => {
+      // Prevent the real request from being sent
+      const controller = new AbortController();
+      config.signal = controller.signal;
 
-// ---- MOCK MODE: replace HTTP methods directly ----
-if (USE_MOCK) {
-  type AxiosResponse<T = unknown> = { status: number; data: T; headers: Record<string, string>; config: Record<string, unknown> };
+      // Immediately abort and return mock data
+      const mockData = await handleMockRequest(
+        config.method?.toUpperCase() || 'GET',
+        config.url || '',
+        config.data
+      );
 
-  async function mockCall(method: string, url: string, data?: unknown): Promise<AxiosResponse> {
-    const result = await handleMockRequest(method, url, data);
-    return { status: 200, data: result, headers: {}, config: {} };
-  }
+      // Store mock data on the config for the response interceptor
+      (config as Record<string, unknown>)._mockData = mockData;
+      controller.abort();
 
-  // Replace HTTP methods on the axios instance
-  (api as unknown as Record<string, unknown>).get = (url: string, config?: unknown) =>
-    mockCall('GET', url);
-  (api as unknown as Record<string, unknown>).post = (url: string, data?: unknown, config?: unknown) =>
-    mockCall('POST', url, data);
-  (api as unknown as Record<string, unknown>).put = (url: string, data?: unknown, config?: unknown) =>
-    mockCall('PUT', url, data);
-  (api as unknown as Record<string, unknown>).delete = (url: string, config?: unknown) =>
-    mockCall('DELETE', url);
-  (api as unknown as Record<string, unknown>).patch = (url: string, data?: unknown, config?: unknown) =>
-    mockCall('PATCH', url, data);
-}
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
 
-// ---- TOKEN REFRESH (real API only) ----
-if (!USE_MOCK) {
-  let isRefreshing = false;
-  let failedQueue: Array<{ resolve: (v: string) => void; reject: (e: unknown) => void }> = [];
-
+  // Catch aborted requests and return mock data
   api.interceptors.response.use(
     (response) => response,
-    async (error) => {
-      const originalRequest = error.config;
-      if (error.response?.status === 401 && !originalRequest._retry) {
-        if (isRefreshing) {
-          return new Promise((resolve, reject) => {
-            failedQueue.push({ resolve, reject });
-          }).then((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            return api(originalRequest);
-          });
-        }
-        originalRequest._retry = true;
-        isRefreshing = true;
-        const refreshToken = useAuthStore.getState().refreshToken;
-        if (!refreshToken) {
-          useAuthStore.getState().logout();
-          window.location.href = '/login';
-          return Promise.reject(error);
-        }
-        try {
-          const resp = await axios.post('/api/v1/auth/refresh', { refresh_token: refreshToken });
-          const { access_token, refresh_token } = resp.data.data;
-          useAuthStore.getState().setTokens(access_token, refresh_token);
-          failedQueue.forEach(({ resolve }) => resolve(access_token));
-          failedQueue = [];
-          originalRequest.headers.Authorization = `Bearer ${access_token}`;
-          return api(originalRequest);
-        } catch (refreshError) {
-          failedQueue.forEach(({ reject }) => reject(refreshError));
-          failedQueue = [];
-          useAuthStore.getState().logout();
-          window.location.href = '/login';
-          return Promise.reject(refreshError);
-        } finally {
-          isRefreshing = false;
-        }
+    (error) => {
+      const mockData = (error?.config as Record<string, unknown>)?._mockData;
+      if (mockData && (axios.isCancel(error) || error?.code === 'ERR_CANCELED')) {
+        return Promise.resolve({
+          status: 200,
+          statusText: 'OK',
+          data: mockData,
+          headers: {},
+          config: error.config || {},
+        });
       }
       return Promise.reject(error);
     }
   );
+} else {
+  // ===== LIVE MODE: auth token =====
+  api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  });
 }
 
 export default api;
-export { USE_MOCK };

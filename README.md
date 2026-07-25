@@ -77,3 +77,18 @@ make test
 # 进入后端 shell
 make shell
 ```
+
+## 许可证
+
+**GNU Affero General Public License v3.0 (AGPL-3.0)**
+
+本系统采用 AGPL-3.0 严格开源协议：
+
+- ✅ 自由使用、修改和分发
+- ⚠️ **通过网络提供服务（SaaS）必须公开修改后的源代码**
+- ⚠️ 所有衍生作品必须以 AGPL-3.0 开源
+- ❌ 禁止闭源商业化
+
+> 选择 AGPL-3.0 是为确保学生心理健康工具始终对社区透明开放。
+
+详见 [LICENSE](./LICENSE) | © 2026 Cecilia
