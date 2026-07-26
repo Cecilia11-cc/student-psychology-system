@@ -1,77 +1,70 @@
-import axios from 'axios';
 import { handleMockRequest } from './mockApi';
 
-const IS_DEMO = (() => {
-  const h = window.location.hostname;
-  if (h.includes('github.io')) return true;
-  if (localStorage.getItem('demo_mode') === 'true') return true;
-  return false;
-})();
+const host = window.location.hostname;
+const DEMO = host.includes('github.io') || host.includes('pages.dev')
+  || localStorage.getItem('demo_mode') === 'true';
 
-// Show a visible indicator on the page during development
 console.log(
-  `%c🧠 SPS %c${IS_DEMO ? 'DEMO' : 'LIVE'} %c| ${window.location.hostname}`,
-  'font-weight:bold;font-size:14px;',
-  `color:${IS_DEMO ? '#faad14' : '#52c41a'};font-weight:bold;`,
-  'color:#999;'
+  `%c[SPS] %c${DEMO ? '🎭 DEMO' : '🔌 LIVE'} %c${host}`,
+  'font-weight:bold;font-size:14px',
+  `color:${DEMO ? '#faad14' : '#52c41a'};font-weight:bold`,
+  'color:#999'
 );
 
-const api = axios.create({
-  baseURL: '/api/v1',
-  timeout: 10000,
-  headers: { 'Content-Type': 'application/json' },
-});
-
-if (IS_DEMO) {
-  // ===== DEMO MODE: intercept ALL requests, return mock data =====
-  api.interceptors.request.use(
-    async (config) => {
-      // Prevent the real request from being sent
-      const controller = new AbortController();
-      config.signal = controller.signal;
-
-      // Immediately abort and return mock data
-      const mockData = await handleMockRequest(
-        config.method?.toUpperCase() || 'GET',
-        config.url || '',
-        config.data
-      );
-
-      // Store mock data on the config for the response interceptor
-      (config as Record<string, unknown>)._mockData = mockData;
-      controller.abort();
-
-      return config;
-    },
-    (error) => Promise.reject(error)
-  );
-
-  // Catch aborted requests and return mock data
-  api.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      const mockData = (error?.config as Record<string, unknown>)?._mockData;
-      if (mockData && (axios.isCancel(error) || error?.code === 'ERR_CANCELED')) {
-        return Promise.resolve({
-          status: 200,
-          statusText: 'OK',
-          data: mockData,
-          headers: {},
-          config: error.config || {},
-        });
-      }
-      return Promise.reject(error);
-    }
-  );
-} else {
-  // ===== LIVE MODE: auth token =====
-  api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  });
+// Simple mock API — returns fake HTTP responses
+async function call(method: string, url: string, data?: unknown) {
+  const result = await handleMockRequest(method, url, data);
+  return { status: 200, data: result, headers: {}, config: {} };
 }
+
+const mockApi = {
+  get: (url: string) => call('GET', url),
+  post: (url: string, data?: unknown) => call('POST', url, data),
+  put: (url: string, data?: unknown) => call('PUT', url, data),
+  delete: (url: string) => call('DELETE', url),
+  patch: (url: string, data?: unknown) => call('PATCH', url, data),
+  interceptors: {
+    request: { use: () => 0, eject: () => {} },
+    response: { use: () => 0, eject: () => {} },
+  },
+};
+
+type ApiType = typeof mockApi;
+
+let liveApi: ApiType | null = null;
+
+function getLiveApi(): ApiType {
+  if (liveApi) return liveApi;
+  const axios = (window as unknown as Record<string, unknown>).axios as Record<string, unknown>;
+  if (!axios || typeof axios.create !== 'function') {
+    console.warn('[SPS] axios not found, using mock');
+    return mockApi;
+  }
+  const inst = (axios.create as (opts: Record<string, unknown>) => Record<string, unknown>)({
+    baseURL: '/api/v1',
+    timeout: 10000,
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (typeof inst.interceptors === 'object' && inst.interceptors) {
+    const req = (inst.interceptors as Record<string, unknown>).request as Record<string, unknown>;
+    if (typeof req?.use === 'function') {
+      (req.use as (fn: (cfg: Record<string, unknown>) => Record<string, unknown>) => void)((cfg: Record<string, unknown>) => {
+        const token = localStorage.getItem('access_token');
+        if (token) {
+          (cfg as Record<string, unknown>).headers = {
+            ...((cfg as Record<string, unknown>).headers as Record<string, unknown> || {}),
+            Authorization: `Bearer ${token}`,
+          };
+        }
+        return cfg;
+      });
+    }
+  }
+  liveApi = inst as unknown as ApiType;
+  return liveApi;
+}
+
+// Export: demo = mock, dev = live axios
+const api: ApiType = DEMO ? mockApi : getLiveApi();
 
 export default api;

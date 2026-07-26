@@ -11,6 +11,7 @@ const TeacherDashboard = lazy(() => import('./pages/teacher/TeacherDashboard'));
 const MyStudentsPage = lazy(() => import('./pages/teacher/MyStudentsPage'));
 const StudentDetailPage = lazy(() => import('./pages/teacher/StudentDetailPage'));
 const ParentDashboard = lazy(() => import('./pages/parent/ParentDashboard'));
+const PsychDashboard = lazy(() => import('./pages/psychologist/PsychDashboard'));
 
 const Loading = () => (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -40,7 +41,7 @@ export default function App() {
 
             {/* Psychologist routes */}
             <Route element={<RoleGuard allowedRoles={['psychologist']} />}>
-              <Route path="/psych" element={<TeacherDashboard />} />
+              <Route path="/psych" element={<PsychDashboard />} />
             </Route>
 
             {/* Parent routes */}

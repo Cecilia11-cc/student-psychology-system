@@ -20,15 +20,18 @@ export default function LoginPage() {
 
   const onFinish = async (values: { username: string; password: string }) => {
     setLoading(true);
+    console.log('[Login] Attempting:', values.username);
     try {
       const result = await authService.login(values);
+      console.log('[Login] Success:', result.user.role, result.user.full_name);
       login(result.user, result.access_token, result.refresh_token);
       message.success('欢迎回来！');
       const home: Record<string, string> = { admin: '/admin', teacher: '/teacher', psychologist: '/psych', parent: '/parent' };
       navigate(home[result.user.role] || '/teacher', { replace: true });
     } catch (e: unknown) {
-      const err = e as { response?: { data?: { detail?: string } } };
-      message.error(err?.response?.data?.detail || '登录失败');
+      console.error('[Login] Error:', e);
+      const err = e as { response?: { data?: { detail?: string } }; message?: string };
+      message.error(err?.response?.data?.detail || err?.message || '登录失败');
     } finally { setLoading(false); }
   };
 
@@ -71,6 +74,11 @@ export default function LoginPage() {
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <Title level={3} style={{ marginBottom: 4 }}>登录系统</Title>
             <Text type="secondary">请使用您的账号登录</Text>
+            <div style={{ marginTop: 4 }}>
+              <Text type="secondary" style={{ fontSize: 10, fontFamily: 'monospace' }}>
+                v2026-07-26 | {window.location.hostname.includes('github.io') ? '🎭 Demo' : '🔌 Live'}
+              </Text>
+            </div>
           </div>
 
           <Form size="large" onFinish={onFinish} initialValues={{ username: 'admin', password: 'admin123' }}>
