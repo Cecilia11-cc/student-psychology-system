@@ -10,6 +10,11 @@ const MyStudentsPage = lazy(() => import('./pages/teacher/MyStudentsPage'));
 const StudentDetailPage = lazy(() => import('./pages/teacher/StudentDetailPage'));
 const PsychDashboard = lazy(() => import('./pages/psychologist/PsychDashboard'));
 const ParentDashboard = lazy(() => import('./pages/parent/ParentDashboard'));
+const ObservationEntryPage = lazy(() => import('./pages/teacher/ObservationEntryPage'));
+const BatchObservationPage = lazy(() => import('./pages/teacher/BatchObservationPage'));
+const IncidentReportPage = lazy(() => import('./pages/teacher/IncidentReportPage'));
+const InterventionListPage = lazy(() => import('./pages/teacher/InterventionListPage'));
+const ReportsPage = lazy(() => import('./pages/teacher/ReportsPage'));
 
 const Loading = () => (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -36,6 +41,11 @@ export default function App() {
           <Route path="/teacher" element={<TeacherDashboard />} />
           <Route path="/teacher/students" element={<MyStudentsPage />} />
           <Route path="/teacher/students/:id" element={<StudentDetailPage />} />
+          <Route path="/teacher/observations/new" element={<ObservationEntryPage />} />
+          <Route path="/teacher/observations/batch" element={<BatchObservationPage />} />
+          <Route path="/teacher/incidents" element={<IncidentReportPage />} />
+          <Route path="/teacher/interventions" element={<InterventionListPage />} />
+          <Route path="/teacher/reports" element={<ReportsPage />} />
 
           {/* Psychologist */}
           <Route path="/psych" element={<PsychDashboard />} />
