@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface User {
+export interface User {
   id: string;
   username: string;
   full_name: string;
@@ -12,40 +12,40 @@ interface User {
 interface AuthState {
   user: User | null;
   accessToken: string | null;
-  refreshToken: string | null;
   isAuthenticated: boolean;
-  login: (user: User, accessToken: string, refreshToken: string) => void;
+  setUser: (user: User) => void;
   logout: () => void;
-  setTokens: (accessToken: string, refreshToken: string) => void;
 }
 
-const storedUser = localStorage.getItem('user');
-const storedAccess = localStorage.getItem('access_token');
-const storedRefresh = localStorage.getItem('refresh_token');
+// Auto-login as default teacher
+const DEFAULT_USER: User = {
+  id: 'demo-teacher-001',
+  username: 'XIAOCHENLAOSHI',
+  full_name: '小陈老师',
+  role: 'teacher',
+  email: 'xiaochen@school.edu.cn',
+  school_id: 'demo-school-001',
+};
+
+const stored = localStorage.getItem('sps_user');
+const initialUser: User = stored ? JSON.parse(stored) : DEFAULT_USER;
+
+if (!stored) {
+  localStorage.setItem('sps_user', JSON.stringify(DEFAULT_USER));
+}
 
 export const useAuthStore = create<AuthState>((set) => ({
-  user: storedUser ? JSON.parse(storedUser) : null,
-  accessToken: storedAccess,
-  refreshToken: storedRefresh,
-  isAuthenticated: !!storedAccess,
+  user: initialUser,
+  accessToken: 'demo-token',
+  isAuthenticated: true,
 
-  login: (user, accessToken, refreshToken) => {
-    localStorage.setItem('user', JSON.stringify(user));
-    localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('refresh_token', refreshToken);
-    set({ user, accessToken, refreshToken, isAuthenticated: true });
+  setUser: (user: User) => {
+    localStorage.setItem('sps_user', JSON.stringify(user));
+    set({ user, isAuthenticated: true });
   },
 
   logout: () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    set({ user: null, accessToken: null, refreshToken: null, isAuthenticated: false });
-  },
-
-  setTokens: (accessToken, refreshToken) => {
-    localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('refresh_token', refreshToken);
-    set({ accessToken, refreshToken });
+    localStorage.removeItem('sps_user');
+    set({ user: null, accessToken: null, isAuthenticated: false });
   },
 }));
